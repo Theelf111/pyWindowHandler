@@ -14,13 +14,14 @@
     ''
       from ctypes import CDLL
 
-      bindings = CDLL(\"./bindings.so\")
+      bindings = CDLL(path)
 
     ''
     + builtins.concatStringsSep "\n" (map (x: "${x} = bindings.${x}") bindings)
     + "\n"
     + ''
       del bindings
+      del path
     '';
 
   pyproject = version: ''
@@ -37,7 +38,7 @@
       name = "py-window-handler-python-src";
 
       src = builtins.path {
-        path = ./cpp-src;
+        path = ./src;
         name = final.name + "-src";
       };
 
@@ -51,7 +52,9 @@
       in ''
         mkdir ${dir}
         touch ${dir}/__init__.py
-        echo "${mainFileText}" > ${dir}/__init__.py
+        echo "path = \"`echo $out/pyWindowHandler/bindings.so`\"
+        " > ${dir}/__init__.py
+        echo "${mainFileText}" >> ${dir}/__init__.py
         touch $out/pyproject.toml
         echo "${pyproject version}" > $out/pyproject.toml
 
