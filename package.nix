@@ -3,12 +3,12 @@
   scons,
   pkg-config,
   python313,
+  moduleName ? "pyWindowHandler",
+  bindings ? [],
 }: let
   python = python313;
   pythonPkgs = python.pkgs;
   inherit (pythonPkgs) buildPythonPackage;
-
-  bindings = ["test"];
 
   mainFileText =
     ''
@@ -26,7 +26,7 @@
 
   pyproject = version: ''
     [project]
-    name = \"pyWindowHandler\"
+    name = \"${moduleName}\"
     version = \"${version}\"
 
     [tool.setuptools.packages]
@@ -48,11 +48,11 @@
       '';
 
       installPhase = let
-        dir = "$out/pyWindowHandler";
+        dir = "$out/${moduleName}";
       in ''
         mkdir ${dir}
         touch ${dir}/__init__.py
-        echo "path = \"`echo $out/pyWindowHandler/bindings.so`\"
+        echo "path = \"`echo ${dir}/bindings.so`\"
         " > ${dir}/__init__.py
         echo "${mainFileText}" >> ${dir}/__init__.py
         touch $out/pyproject.toml
