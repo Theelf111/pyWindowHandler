@@ -4,25 +4,18 @@
   pkg-config,
   python313,
   moduleName ? "pyWindowHandler",
-  bindings ? [],
 }: let
   python = python313;
   pythonPkgs = python.pkgs;
   inherit (pythonPkgs) buildPythonPackage;
 
-  mainFileText =
-    ''
-      from ctypes import CDLL
+  mainFileText = ''
+    from ctypes import CDLL
 
-      bindings = CDLL(path)
+    bindings = CDLL(path)
+    del CDLL
 
-    ''
-    + builtins.concatStringsSep "\n" (map (x: "${x} = bindings.${x}") bindings)
-    + "\n"
-    + ''
-      del bindings
-      del path
-    '';
+  '';
 
   pyproject = version: ''
     [project]
@@ -55,6 +48,7 @@
         echo "path = \"`echo ${dir}/bindings.so`\"
         " > ${dir}/__init__.py
         echo "${mainFileText}" >> ${dir}/__init__.py
+        cat "${./main.py}" >> ${dir}/__init__.py
         touch $out/pyproject.toml
         echo "${pyproject version}" > $out/pyproject.toml
 

@@ -11,11 +11,9 @@
     packages = forEachSystem (system: let
       pkgs = localPkgs system;
     in rec {
-      py-window-handler = pkgs.callPackage ./package.nix {
-        bindings = [
-          "test"
-        ];
-      };
+      py-window-handler =
+        pkgs.callPackage ./package.nix {
+        };
 
       default = py-window-handler;
 
