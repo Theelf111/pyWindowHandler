@@ -1,9 +1,0 @@
-[project]
-name = "pyWindowHandler"
-version = "0.1"
-
-[tool.setuptools.packages]
-find = {}
-
-# [tool.setuptools.packages.find]
-

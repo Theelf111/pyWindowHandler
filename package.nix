@@ -8,36 +8,69 @@
   pythonPkgs = python.pkgs;
   inherit (pythonPkgs) buildPythonPackage;
 
-  soFile = stdenv.mkDerivation (final: {
-    name = "py-window-handler-bindings.so";
+  bindings = ["test"];
 
-    src = builtins.path {
-      path = ./cpp-src;
-      name = final.name + "-src";
-    };
+  mainFileText =
+    ''
+      from ctypes import CDLL
 
-    preBuild = ''
-      export LINKFLAGS="`pkg-config --libs-only-l ${toString [python]}`"
-      export NAME=$name
+      bindings = CDLL(\"./bindings.so\")
+
+    ''
+    + builtins.concatStringsSep "\n" (map (x: "${x} = bindings.${x}") bindings)
+    + "\n"
+    + ''
+      del bindings
     '';
 
-    installPhase = ''
-      cp lib$name.so $out
-    '';
+  pyproject = version: ''
+    [project]
+    name = \"pyWindowHandler\"
+    version = \"${version}\"
 
-    nativeBuildInputs = [
-      scons
-      pkg-config
-    ];
-    buildInputs = [python];
-  });
+    [tool.setuptools.packages]
+    find = {}
+  '';
+
+  pythonSource = version:
+    stdenv.mkDerivation (final: {
+      name = "py-window-handler-python-src";
+
+      src = builtins.path {
+        path = ./cpp-src;
+        name = final.name + "-src";
+      };
+
+      preBuild = ''
+        export LINKFLAGS="`pkg-config --libs-only-l ${toString []}`"
+        export NAME=$name
+      '';
+
+      installPhase = let
+        dir = "$out/pyWindowHandler";
+      in ''
+        mkdir ${dir}
+        touch ${dir}/__init__.py
+        echo "${mainFileText}" > ${dir}/__init__.py
+        touch $out/pyproject.toml
+        echo "${pyproject version}" > $out/pyproject.toml
+
+        cp lib$name.so ${dir}/bindings.so
+      '';
+
+      nativeBuildInputs = [
+        scons
+        pkg-config
+      ];
+      buildInputs = [];
+    });
 in
   buildPythonPackage (final: {
     pname = "py-window-handler";
     version = "0.1";
 
     src = builtins.path {
-      path = ./python-src;
+      path = (pythonSource final.version).outPath;
       name = final.pname + "-src";
     };
 
@@ -46,8 +79,4 @@ in
     ];
 
     pyproject = true;
-
-    installPhase = ''
-      cp ${soFile} ${final.src.name}/pyWindowHandler.so
-    '';
   })
