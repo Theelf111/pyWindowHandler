@@ -2,34 +2,52 @@
   stdenv,
   scons,
   pkg-config,
-  python313Packages,
+  python313,
 }: let
-  inherit (python313Packages) python;
-  libs = [python];
-in
-  stdenv.mkDerivation (final: {
-    pname = "pyWindowHandler";
-    version = "0.1";
+  python = python313;
+  pythonPkgs = python.pkgs;
+  inherit (pythonPkgs) buildPythonPackage;
+
+  soFile = stdenv.mkDerivation (final: {
+    name = "py-window-handler-bindings.so";
 
     src = builtins.path {
-      path = ./.;
-      name = final.pname + "-src";
+      path = ./cpp-src;
+      name = final.name + "-src";
     };
 
     preBuild = ''
-      export LINKFLAGS="`pkg-config --libs-only-l ${toString libs}`"
-      export NAME=$pname
+      export LINKFLAGS="`pkg-config --libs-only-l ${toString [python]}`"
+      export NAME=$name
     '';
 
     installPhase = ''
-      mkdir $out/bin
-      ls
-      cp lib$pname.so $out/bin/$pname.so
+      cp lib$name.so $out
     '';
 
     nativeBuildInputs = [
       scons
       pkg-config
     ];
-    buildInputs = libs;
+    buildInputs = [python];
+  });
+in
+  buildPythonPackage (final: {
+    pname = "py-window-handler";
+    version = "0.1";
+
+    src = builtins.path {
+      path = ./python-src;
+      name = final.pname + "-src";
+    };
+
+    propagatedBuildInputs = [
+      python.pkgs.setuptools
+    ];
+
+    pyproject = true;
+
+    installPhase = ''
+      cp ${soFile} ${final.src.name}/pyWindowHandler.so
+    '';
   })

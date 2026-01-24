@@ -10,8 +10,12 @@
   in {
     packages = forEachSystem (system: let
       pkgs = localPkgs system;
-    in {
-      default = pkgs.callPackage ./package.nix {};
+    in rec {
+      py-window-handler = pkgs.callPackage ./package.nix {};
+
+      default = py-window-handler;
+
+      environment = pkgs.python313.withPackages (_: [py-window-handler]);
     });
   };
 }
