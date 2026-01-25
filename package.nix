@@ -3,6 +3,8 @@
   scons,
   pkg-config,
   python313,
+  glfw3,
+  glew,
   moduleName ? "pyWindowHandler",
 }: let
   python = python313;
@@ -36,7 +38,7 @@
       };
 
       preBuild = ''
-        export LINKFLAGS="`pkg-config --libs-only-l ${toString []}`"
+        export LINKFLAGS="`pkg-config --libs-only-l ${toString ["glfw3" "glew"]}`"
         export NAME=$name
       '';
 
@@ -59,7 +61,10 @@
         scons
         pkg-config
       ];
-      buildInputs = [];
+      buildInputs = [
+        glfw3
+        glew
+      ];
     });
 in
   buildPythonPackage (final: {

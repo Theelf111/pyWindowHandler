@@ -1,5 +1,6 @@
-#pragma once
+#include <iostream>
 
-extern "C" int test();
+//#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-extern "C" int add2(int, int);
+using namespace std;
