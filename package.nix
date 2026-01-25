@@ -20,7 +20,6 @@
   mainFileEnd = ''
     del path
     del ctypes
-    del bindings
   '';
 
   pyproject = version: ''
