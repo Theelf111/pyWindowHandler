@@ -10,6 +10,9 @@ def add2(x: int, y: int) -> int:
 def init():
     return bindings.init()
 
+def windowHint(hint, value):
+    return bindings.windowHint(hint, value)
+
 def createWindow(width, height):
     return bindings.createWindow(width, height)
 

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define VAR(x) int VAR_##x = x
+#define VAR(x) int VAR_ ## x = x
 
 extern "C"
 {

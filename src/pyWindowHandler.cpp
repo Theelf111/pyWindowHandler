@@ -20,13 +20,19 @@ int init()
     return 0;
 }
 
+void windowHint(int hint, int value)
+{
+    glfwWindowHint(hint, value);
+}
+
 GLFWwindow* window = nullptr;
 int windowWidth = 0;
 int windowHeight = 0;
 
 void windowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    glfwSetWindowSize(window, windowWidth, windowHeight);
+    //glfwSetWindowSize(window, windowWidth, windowHeight);
+    cout << "RESIZE: " << width << ", " << height << endl;
 }
 
 extern "C"
