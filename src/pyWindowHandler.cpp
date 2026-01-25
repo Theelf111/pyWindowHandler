@@ -36,7 +36,7 @@ int init()
     return 0;
 }
 
-bool resizableHint = false;
+bool resizableHint = true;
 
 extern "C"
 void windowHint(int hint, int value)
