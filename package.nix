@@ -11,12 +11,16 @@
   pythonPkgs = python.pkgs;
   inherit (pythonPkgs) buildPythonPackage;
 
-  mainFileText = ''
-    from ctypes import CDLL
+  mainFileStart = ''
+    import ctypes
 
-    bindings = CDLL(path)
-    del CDLL
+    bindings = ctypes.CDLL(path)
+  '';
 
+  mainFileEnd = ''
+    del path
+    del ctypes
+    del bindings
   '';
 
   pyproject = version: ''
@@ -49,8 +53,9 @@
         touch ${dir}/__init__.py
         echo "path = \"`echo ${dir}/bindings.so`\"
         " > ${dir}/__init__.py
-        echo "${mainFileText}" >> ${dir}/__init__.py
+        echo "${mainFileStart}" >> ${dir}/__init__.py
         cat "${./main.py}" >> ${dir}/__init__.py
+        echo "${mainFileEnd}" >> ${dir}/__init__.py
         touch $out/pyproject.toml
         echo "${pyproject version}" > $out/pyproject.toml
 
