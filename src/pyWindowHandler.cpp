@@ -20,6 +20,11 @@ int init()
     return 0;
 }
 
+GLFWwindow* window = nullptr;
+int windowWidth = 0;
+int windowHeight = 0;
+bool windowResizable = true;
+
 extern "C"
 void windowHint(int hint, int value)
 {
@@ -27,11 +32,6 @@ void windowHint(int hint, int value)
     if (hint == GLFW_RESIZABLE)
         windowResizable = value;
 }
-
-GLFWwindow* window = nullptr;
-int windowWidth = 0;
-int windowHeight = 0;
-bool windowResizable = true;
 
 void windowSizeCallback(GLFWwindow* window, int width, int height)
 {
