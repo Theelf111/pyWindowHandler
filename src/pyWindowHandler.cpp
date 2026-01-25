@@ -21,8 +21,11 @@ int init()
 }
 
 GLFWwindow* window = nullptr;
-int windowWidth = 0;
-int windowHeight = 0;
+extern "C"
+{
+    int windowWidth = 0;
+    int windowHeight = 0;
+}
 bool windowResizable = true;
 
 extern "C"

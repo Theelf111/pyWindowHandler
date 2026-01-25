@@ -19,6 +19,9 @@ def createWindow(width, height):
 def windowShouldClose():
     return bindings.windowShouldClose()
 
+def getWindowSize():
+    return (ctypes.c_int.in_dll(bindings, "windowWidth"), ctypes.c_int.in_dll(bindings, "windowHeight"))
+
 def pollEvents():
     bindings.pollEvents()
 
