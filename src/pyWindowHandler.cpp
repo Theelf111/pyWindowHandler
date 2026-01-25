@@ -20,6 +20,7 @@ int init()
     return 0;
 }
 
+extern "C"
 void windowHint(int hint, int value)
 {
     glfwWindowHint(hint, value);
