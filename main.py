@@ -7,26 +7,39 @@ def add2(x: int, y: int) -> int:
     else:
         raise Exception("Invalid Type")
 
+class WindowInfo(ctypes.Structure):
+    _fields_ = [
+        ("width", ctypes.c_int),
+        ("height", ctypes.c_int),
+        ("resizable", ctypes.c_bool)
+    ]
+
+bindings.getWindowInfo.restype = WindowInfo
+def getWindowInfo(window):
+    return bindings.getWindowInfo(window)
+
 def init():
     return bindings.init()
 
 def windowHint(hint, value):
-    return bindings.windowHint(hint, value)
+    bindings.windowHint(hint, value)
 
+bindings.createWindow.restype = ctypes.c_void_p
 def createWindow(width, height):
-    return bindings.createWindow(width, height)
+    return ctypes.c_void_p(bindings.createWindow(width, height))
 
-def windowShouldClose():
-    return bindings.windowShouldClose()
+def windowShouldClose(window):
+    return bindings.windowShouldClose(window)
 
-def getWindowSize():
-    return (ctypes.c_int.in_dll(bindings, "windowWidth").value, ctypes.c_int.in_dll(bindings, "windowHeight").value)
+def getWindowSize(window):
+    info = getWindowInfo(window)
+    return (info.width, info.height)
 
 def pollEvents():
     bindings.pollEvents()
 
-def swapBuffers():
-    bindings.swapBuffers()
+def swapBuffers(window):
+    bindings.swapBuffers(window)
 
 constants = [
     "RESIZABLE",

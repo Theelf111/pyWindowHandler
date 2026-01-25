@@ -1,8 +1,24 @@
 #include "pyWindowHandler.h"
+#include <unordered_map>
 
 extern "C" int test() { return 13; }
 
 extern "C" int add2(int x, int y) { return x + y; }
+
+struct WindowInfo
+{
+    int width;
+    int height;
+    bool resizable;
+};
+
+unordered_map<GLFWwindow*, WindowInfo> windowsInfo;
+
+extern "C"
+WindowInfo getWindowInfo(GLFWwindow* window)
+{
+    return windowsInfo[window];
+}
 
 extern "C"
 int init()
@@ -20,46 +36,37 @@ int init()
     return 0;
 }
 
-GLFWwindow* window = nullptr;
-extern "C"
-{
-    int windowWidth = 0;
-    int windowHeight = 0;
-}
-bool windowResizable = true;
+bool resizableHint = false;
 
 extern "C"
 void windowHint(int hint, int value)
 {
     glfwWindowHint(hint, value);
     if (hint == GLFW_RESIZABLE)
-        windowResizable = value;
+        resizableHint = value;
 }
 
 void windowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    if (windowResizable)
+    if (windowsInfo[window].resizable)
     {
-        windowWidth = width;
-        windowHeight = height;
+        windowsInfo[window].width = width;
+        windowsInfo[window].height = height;
         glViewport(0, 0, width, height);
     }
     else
-        glfwSetWindowSize(window, windowWidth, windowHeight);
-    //cout << "RESIZE: " << width << ", " << height << endl;
+        glfwSetWindowSize(window, windowsInfo[window].width, windowsInfo[window].height);
 }
 
 extern "C"
-int createWindow(int width, int height)
+GLFWwindow* createWindow(int width, int height)
 {
-    windowWidth = width;
-    windowHeight = height;
-    window = glfwCreateWindow(width, height, "window", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(width, height, "window", NULL, NULL);
     if (!window)
     {
         cout << "glfwCreateWindow() failed" << endl;
         glfwTerminate();
-        return -1;
+        return 0;
     }
 
     glfwMakeContextCurrent(window);
@@ -67,11 +74,14 @@ int createWindow(int width, int height)
     glfwSwapInterval(1);
 
     glfwSetWindowSizeCallback(window, windowSizeCallback);
-    return 0;
+
+    windowsInfo[window] = WindowInfo {width, height, resizableHint};
+
+    return window;
 }
 
 extern "C"
-int windowShouldClose()
+int windowShouldClose(GLFWwindow* window)
 {
     return glfwWindowShouldClose(window);
 }
@@ -83,7 +93,7 @@ void pollEvents()
 }
 
 extern "C"
-void swapBuffers()
+void swapBuffers(GLFWwindow* window)
 {
     glfwSwapBuffers(window);
 }
