@@ -39,6 +39,7 @@ void windowSizeCallback(GLFWwindow* window, int width, int height)
     {
         windowWidth = width;
         windowHeight = height;
+        glViewport(0, 0, width, height);
     }
     else
         glfwSetWindowSize(window, windowWidth, windowHeight);
