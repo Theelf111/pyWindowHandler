@@ -24,16 +24,25 @@ extern "C"
 void windowHint(int hint, int value)
 {
     glfwWindowHint(hint, value);
+    if (hint == GLFW_RESIZABLE)
+        windowResizable = value;
 }
 
 GLFWwindow* window = nullptr;
 int windowWidth = 0;
 int windowHeight = 0;
+bool windowResizable = true;
 
 void windowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    //glfwSetWindowSize(window, windowWidth, windowHeight);
-    cout << "RESIZE: " << width << ", " << height << endl;
+    if (windowResizable)
+    {
+        windowWidth = width;
+        windowHeight = height;
+    }
+    else
+        glfwSetWindowSize(window, windowWidth, windowHeight);
+    //cout << "RESIZE: " << width << ", " << height << endl;
 }
 
 extern "C"
