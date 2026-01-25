@@ -19,7 +19,6 @@
 
   mainFileEnd = ''
     del path
-    del ctypes
   '';
 
   pyproject = version: ''
