@@ -52,7 +52,10 @@ void windowSizeCallback(GLFWwindow* window, int width, int height)
     {
         windowsInfo[window].width = width;
         windowsInfo[window].height = height;
+        GLFWwindow* currentContext = glfwGetCurrentContext();
+        glfwMakeContextCurrent(window);
         glViewport(0, 0, width, height);
+        glfwMakeContextCurrent(currentContext);
     }
     else
         glfwSetWindowSize(window, windowsInfo[window].width, windowsInfo[window].height);
@@ -78,6 +81,12 @@ GLFWwindow* createWindow(int width, int height)
     windowsInfo[window] = WindowInfo {width, height, resizableHint};
 
     return window;
+}
+
+extern "C"
+void selectWindow(GLFWwindow* window)
+{
+    glfwMakeContextCurrent(window);
 }
 
 extern "C"

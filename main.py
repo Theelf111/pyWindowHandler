@@ -28,6 +28,9 @@ bindings.createWindow.restype = ctypes.c_void_p
 def createWindow(width, height):
     return ctypes.c_void_p(bindings.createWindow(width, height))
 
+def selectWindow(window):
+    bindings.selectWindow(window)
+
 def windowShouldClose(window):
     return bindings.windowShouldClose(window)
 
