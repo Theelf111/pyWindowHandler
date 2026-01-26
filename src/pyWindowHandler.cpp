@@ -62,15 +62,17 @@ void windowSizeCallback(GLFWwindow* window, int width, int height)
 }
 
 extern "C"
-GLFWwindow* createWindow(int width, int height)
+GLFWwindow* createWindow(int width, int height, char* title)
 {
-    GLFWwindow* window = glfwCreateWindow(width, height, "window", NULL, NULL);
+    cout << title << endl;
+    GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!window)
     {
         cout << "glfwCreateWindow() failed" << endl;
         glfwTerminate();
         return 0;
     }
+    glfwSetWindowSize(window, width, height);
 
     glfwMakeContextCurrent(window);
     glViewport(0, 0, width, height);

@@ -25,8 +25,8 @@ def windowHint(hint, value):
     bindings.windowHint(hint, value)
 
 bindings.createWindow.restype = ctypes.c_void_p
-def createWindow(width, height):
-    return ctypes.c_void_p(bindings.createWindow(width, height))
+def createWindow(width, height, title):
+    return ctypes.c_void_p(bindings.createWindow(width, height, title.encode()+b"\x00"))
 
 def selectWindow(window):
     bindings.selectWindow(window)
