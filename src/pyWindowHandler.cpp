@@ -64,7 +64,6 @@ void windowSizeCallback(GLFWwindow* window, int width, int height)
 extern "C"
 GLFWwindow* createWindow(int width, int height, char* title)
 {
-    cout << title << endl;
     GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!window)
     {
