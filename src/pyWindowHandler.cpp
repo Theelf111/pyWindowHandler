@@ -62,7 +62,6 @@ GLFWwindow* createWindow(int width, int height, char* title)
         glfwTerminate();
         return 0;
     }
-    glfwSetWindowSize(window, width, height);
 
     glfwMakeContextCurrent(window);
     glViewport(0, 0, width, height);
