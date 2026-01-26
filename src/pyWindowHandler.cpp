@@ -9,7 +9,6 @@ struct WindowInfo
 {
     int width;
     int height;
-    bool resizable;
 };
 
 unordered_map<GLFWwindow*, WindowInfo> windowsInfo;
@@ -23,6 +22,7 @@ WindowInfo getWindowInfo(GLFWwindow* window)
 extern "C"
 int init()
 {
+    glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_DISABLE_LIBDECOR);
     if (!glfwInit())
     {
         cout << "glfwInit() false" << endl;
@@ -36,29 +36,20 @@ int init()
     return 0;
 }
 
-bool resizableHint = true;
-
 extern "C"
 void windowHint(int hint, int value)
 {
     glfwWindowHint(hint, value);
-    if (hint == GLFW_RESIZABLE)
-        resizableHint = value;
 }
 
 void windowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    if (windowsInfo[window].resizable)
-    {
-        windowsInfo[window].width = width;
-        windowsInfo[window].height = height;
-        GLFWwindow* currentContext = glfwGetCurrentContext();
-        glfwMakeContextCurrent(window);
-        glViewport(0, 0, width, height);
-        glfwMakeContextCurrent(currentContext);
-    }
-    else
-        glfwSetWindowSize(window, windowsInfo[window].width, windowsInfo[window].height);
+    windowsInfo[window].width = width;
+    windowsInfo[window].height = height;
+    GLFWwindow* currentContext = glfwGetCurrentContext();
+    glfwMakeContextCurrent(window);
+    glViewport(0, 0, width, height);
+    glfwMakeContextCurrent(currentContext);
 }
 
 extern "C"
@@ -79,7 +70,7 @@ GLFWwindow* createWindow(int width, int height, char* title)
 
     glfwSetWindowSizeCallback(window, windowSizeCallback);
 
-    windowsInfo[window] = WindowInfo {width, height, resizableHint};
+    windowsInfo[window] = WindowInfo {width, height};
 
     return window;
 }

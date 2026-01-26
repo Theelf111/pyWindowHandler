@@ -10,8 +10,7 @@ def add2(x: int, y: int) -> int:
 class WindowInfo(ctypes.Structure):
     _fields_ = [
         ("width", ctypes.c_int),
-        ("height", ctypes.c_int),
-        ("resizable", ctypes.c_bool)
+        ("height", ctypes.c_int)
     ]
 
 bindings.getWindowInfo.restype = WindowInfo
