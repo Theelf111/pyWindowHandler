@@ -14,6 +14,12 @@ struct List
     void* data;
 };
 
+struct Pos
+{
+    double x;
+    double y;
+};
+
 #define VAR(x) int VAR_ ## x = x
 
 extern "C"

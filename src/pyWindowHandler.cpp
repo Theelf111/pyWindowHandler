@@ -1,4 +1,5 @@
 #include "pyWindowHandler.h"
+#include <cstdlib>
 
 extern "C" int test() { return 13; }
 
@@ -135,4 +136,12 @@ extern "C"
 void swapBuffers(GLFWwindow* window)
 {
     glfwSwapBuffers(window);
+}
+
+extern "C"
+Pos getCursorPos(GLFWwindow* window)
+{
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+    return Pos{x, y};
 }

@@ -34,6 +34,11 @@ def List(t):
             return ctypes.cast(self.data, ctypes.POINTER(t * self.size)).contents
     return cls
 
+class Pos(ctypes.Structure):
+    _fields_ = [
+        ("x", ctypes.c_double),
+        ("y", ctypes.c_double)
+    ]
 
 bindings.getWindowInfo.restype = WindowInfo
 def getWindowInfo(window):
@@ -65,6 +70,11 @@ def pollEvents():
 
 def swapBuffers(window):
     bindings.swapBuffers(window)
+
+bindings.getCursorPos.restype = Pos
+def getCursorPos(window):
+    pos = bindings.getCursorPos(window)
+    return (pos.x, pos.y)
 
 constants = [
     "EVENT_KEYDOWN",
