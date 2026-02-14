@@ -65,10 +65,25 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 {
     switch (action)
     {
-    case GLFW_PRESS:
-        events.push_back(Event{window, EVENT_KEYDOWN, key, mods});
     case GLFW_RELEASE:
         events.push_back(Event{window, EVENT_KEYUP, key, mods});
+        break;
+    case GLFW_PRESS:
+        events.push_back(Event{window, EVENT_KEYDOWN, key, mods});
+        break;
+    }
+}
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    switch (action)
+    {
+    case GLFW_RELEASE:
+        events.push_back(Event{window, EVENT_MOUSEBUTTONUP, button, mods});
+        break;
+    case GLFW_PRESS:
+        events.push_back(Event{window, EVENT_MOUSEBUTTONDOWN, button, mods});
+        break;
     }
 }
 
@@ -89,6 +104,7 @@ GLFWwindow* createWindow(int width, int height, char* title)
 
     glfwSetWindowSizeCallback(window, windowSizeCallback);
     glfwSetKeyCallback(window, keyCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
     windowsInfo[window] = WindowInfo {width, height};
 

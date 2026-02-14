@@ -243,7 +243,20 @@ glfwConstants = [
     "MOD_ALT",
     "MOD_SUPER",
     "MOD_CAPS_LOCK",
-    "MOD_NUM_LOCK"
+    "MOD_NUM_LOCK",
+
+    "MOUSE_BUTTON_1",
+    "MOUSE_BUTTON_2",
+    "MOUSE_BUTTON_3",
+    "MOUSE_BUTTON_4",
+    "MOUSE_BUTTON_5",
+    "MOUSE_BUTTON_6",
+    "MOUSE_BUTTON_7",
+    "MOUSE_BUTTON_8",
+    "MOUSE_BUTTON_LAST",
+    "MOUSE_BUTTON_LEFT",
+    "MOUSE_BUTTON_RIGHT",
+    "MOUSE_BUTTON_MIDDLE"
 ]
 
 for constant in constants:
