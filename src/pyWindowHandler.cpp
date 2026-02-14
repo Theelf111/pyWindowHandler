@@ -1,5 +1,4 @@
 #include "pyWindowHandler.h"
-#include <unordered_map>
 
 extern "C" int test() { return 13; }
 
@@ -42,6 +41,16 @@ void windowHint(int hint, int value)
     glfwWindowHint(hint, value);
 }
 
+struct Event
+{
+    void* window;
+    int type = -1;
+    int key = 0;
+    int mods = 0;
+};
+
+vector<Event> events = {};
+
 void windowSizeCallback(GLFWwindow* window, int width, int height)
 {
     windowsInfo[window].width = width;
@@ -50,6 +59,17 @@ void windowSizeCallback(GLFWwindow* window, int width, int height)
     glfwMakeContextCurrent(window);
     glViewport(0, 0, width, height);
     glfwMakeContextCurrent(currentContext);
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    switch (action)
+    {
+    case GLFW_PRESS:
+        events.push_back(Event{window, EVENT_KEYDOWN, key, mods});
+    case GLFW_RELEASE:
+        events.push_back(Event{window, EVENT_KEYUP, key, mods});
+    }
 }
 
 extern "C"
@@ -68,6 +88,7 @@ GLFWwindow* createWindow(int width, int height, char* title)
     glfwSwapInterval(1);
 
     glfwSetWindowSizeCallback(window, windowSizeCallback);
+    glfwSetKeyCallback(window, keyCallback);
 
     windowsInfo[window] = WindowInfo {width, height};
 
@@ -87,9 +108,11 @@ int windowShouldClose(GLFWwindow* window)
 }
 
 extern "C"
-void pollEvents()
+List pollEvents()
 {
+    events.clear();
     glfwPollEvents();
+    return List{events.size(), events.data()};
 }
 
 extern "C"
