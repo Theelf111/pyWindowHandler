@@ -31,7 +31,6 @@ def List(t):
         type = t
 
         def array(self):
-            print(self.data, self.size)
             if self.size == 0:
                 return (t * 0)()
             elif self.size > 0:
