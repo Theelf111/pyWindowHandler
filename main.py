@@ -31,7 +31,13 @@ def List(t):
         type = t
 
         def array(self):
-            return ctypes.cast(self.data, ctypes.POINTER(t * self.size)).contents
+            print(self.data, self.size)
+            if self.size == 0:
+                return (,)
+            elif self.size > 0:
+                return ctypes.cast(self.data, ctypes.POINTER(t * self.size)).contents
+            else:
+                print(f"Illegal C++ array size: {self.size}")
     return cls
 
 class Pos(ctypes.Structure):
