@@ -33,7 +33,7 @@ def List(t):
         def array(self):
             print(self.data, self.size)
             if self.size == 0:
-                return (,)
+                return (t * 0)()
             elif self.size > 0:
                 return ctypes.cast(self.data, ctypes.POINTER(t * self.size)).contents
             else:
