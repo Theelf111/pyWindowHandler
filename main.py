@@ -83,7 +83,9 @@ def getCursorPos(window):
 
 constants = [
     "EVENT_KEYDOWN",
-    "EVENT_KEYUP"
+    "EVENT_KEYUP",
+    "EVENT_MOUSEBUTTONDOWN",
+    "EVENT_MOUSEBUTTONUP"
 ]
 
 glfwConstants = [

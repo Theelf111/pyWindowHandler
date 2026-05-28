@@ -24,10 +24,10 @@ struct Pos
 
 extern "C"
 {
-    int EVENT_KEYUP = 0;
-    int EVENT_KEYDOWN = 1;
-    int EVENT_MOUSEBUTTONUP = 2;
-    int EVENT_MOUSEBUTTONDOWN = 3;
+    int EVENT_KEYDOWN = 0;
+    int EVENT_KEYUP = 1;
+    int EVENT_MOUSEBUTTONDOWN = 2;
+    int EVENT_MOUSEBUTTONUP = 3;
 
     VAR(GLFW_RESIZABLE);
     VAR(GLFW_VISIBLE);
