@@ -1,10 +1,6 @@
 #include "pyWindowHandler.h"
 #include <cstdlib>
 
-extern "C" int test() { return 13; }
-
-extern "C" int add2(int x, int y) { return x + y; }
-
 struct WindowInfo
 {
     int width;
@@ -110,6 +106,12 @@ GLFWwindow* createWindow(int width, int height, char* title)
     windowsInfo[window] = WindowInfo {width, height};
 
     return window;
+}
+
+extern "C"
+void destroyWindow(GLFWwindow* window):
+{
+    glfwDestroyWindow(window);
 }
 
 extern "C"

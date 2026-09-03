@@ -1,12 +1,3 @@
-def test():
-    return bindings.test()
-
-def add2(x: int, y: int) -> int:
-    if type(x) == type(y) and type(y) == int:
-        return bindings.add2(x, y)
-    else:
-        raise Exception("Invalid Type")
-
 class WindowInfo(ctypes.Structure):
     _fields_ = [
         ("width", ctypes.c_int),
@@ -58,6 +49,9 @@ def windowHint(hint, value):
 bindings.createWindow.restype = ctypes.c_void_p
 def createWindow(width, height, title):
     return ctypes.c_void_p(bindings.createWindow(width, height, title.encode()+b"\x00"))
+
+def destroyWindow(window):
+    bindings.destroyWindow(window)
 
 def selectWindow(window):
     bindings.selectWindow(window)
