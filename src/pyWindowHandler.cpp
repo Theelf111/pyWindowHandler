@@ -109,7 +109,7 @@ GLFWwindow* createWindow(int width, int height, char* title)
 }
 
 extern "C"
-void destroyWindow(GLFWwindow* window):
+void destroyWindow(GLFWwindow* window)
 {
     glfwDestroyWindow(window);
 }
