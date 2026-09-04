@@ -68,6 +68,7 @@ def pollEvents():
     events = bindings.pollEvents().array()
     for event in events:
         event.window = ctypes.c_void_p(event.window)
+        print(event.window)
     return events
 
 def swapBuffers(window):
