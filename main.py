@@ -65,7 +65,10 @@ def getWindowSize(window):
 
 bindings.pollEvents.restype = List(Event)
 def pollEvents():
-    return bindings.pollEvents().array()
+    events = bindings.pollEvents().array()
+    for event in events:
+        event.window = ctypes.c_void_p(event.window)
+    return events
 
 def swapBuffers(window):
     bindings.swapBuffers(window)
